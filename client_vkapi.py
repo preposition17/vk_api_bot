@@ -41,6 +41,7 @@ def client_exit(request, vk, event):
 
 def server_exit(request, vk, event):
     if request == 'ss' or request == 'сс':
+        print(f'Message received: {request}')
         print('Server exit...')
         vk.messages.send(
             user_id=event.user_id,
@@ -72,30 +73,24 @@ def main():
         if event.type == VkEventType.MESSAGE_NEW and event.to_me and event.text:
             if event.to_me:
                 request = event.text.lower()
-                server_exit(request, vk, event)
-
                 try:
+                    server_exit(request, vk, event)
                     data_send = str.encode(request)
                     sock.send(data_send)
                     data = sock.recv(1024)
                     message = data.decode()
                     print(f'Message received: {message}')
-                    
+                    client_exit(request, vk, event)
                     vk.messages.send(
                         user_id=event.user_id,
                         random_id=get_random_id(),
                         message=f'{message}'
-                    )    
+                    )                       
                 
                 except vk_api.exceptions.ApiError:
                     program_exit(request, vk, event)
-                    print('Server not responding.')
                     sock = con2serv()
                 
-                client_exit(request, vk, event)
-                
-                
-
 try:
     if __name__ == '__main__':
         main()

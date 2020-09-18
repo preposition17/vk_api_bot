@@ -6,17 +6,16 @@ def msg_snd(request):
         print('Server exit...')
         exit()
         
-
     if request == "кс" or request == "cs":
         print('Client exit...')
-        return('Клиент отключен.')
 
     if request == "стоп" or request == "stop":
         print('Exit...')
         exit()
-    
+
     else:
         return request
+    
 
 '''
 Put your funcs here and no one gets hurt.
